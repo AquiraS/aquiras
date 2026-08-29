@@ -14,6 +14,10 @@ const siteContent = {
     label: "ギャラリー",
     href: "https://www.viewbug.com/member/Aquira#/",
   },
+  news: {
+    label: "News",
+    href: "https://note.com/aquira",
+  },
   journey: {
     stage: "dialogue",
     ariaLabel: "AQUIRAをめぐる3章",

@@ -15,6 +15,7 @@ const officialNetworkLinks = [
 ];
 const galleryUrl = "https://www.viewbug.com/member/Aquira#/";
 const galleryLink = `<a href="${galleryUrl}" target="_blank" rel="external noopener noreferrer" aria-label="ギャラリーを新しいタブで開く">ギャラリー</a>`;
+const newsLink = '<a href="https://note.com/aquira" target="_blank" rel="external noopener noreferrer" aria-label="Newsを新しいタブで開く">News</a>';
 const journeyScript = '<script src="/journey.js" defer></script>';
 
 function requiredMatch(value, expression, message) {
@@ -78,6 +79,10 @@ for (const [file, canonical, type] of pages) {
   const galleryLinkCount = html.split(galleryLink).length - 1;
   if (galleryLinkCount !== 2) {
     throw new Error(`${file}: expected gallery link in header and footer, found ${galleryLinkCount}`);
+  }
+  const newsLinkCount = html.split(newsLink).length - 1;
+  if (!footer.includes(newsLink) || newsLinkCount !== 1) {
+    throw new Error(`${file}: expected one canonical News link in the footer, found ${newsLinkCount}`);
   }
 }
 
