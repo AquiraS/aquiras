@@ -20,6 +20,16 @@ for (const [file, canonical, type] of pages) {
     if (!html.includes(domain)) throw new Error(`${file}: missing official network link ${domain}`);
   }
 }
+const officialNetworkUrls = ["https://www.aquira.art/", "https://www.aquira1978.com/", "https://www.aquira.org/"];
+for (const file of ["index.html", "about/index.html"]) {
+  const html = await readFile(path.join(root, file), "utf8");
+  for (const url of officialNetworkUrls) {
+    if (!html.includes(`<a class="network-card__link" href="${url}"`)) {
+      throw new Error(`${file}: ${url} must be a full-card official-network link`);
+    }
+  }
+}
+
 const robots = await readFile(path.join(root, "robots.txt"), "utf8");
 const sitemap = await readFile(path.join(root, "sitemap.xml"), "utf8");
 for (const [, canonical] of pages) if (!sitemap.includes(`<loc>${canonical}</loc>`)) throw new Error(`sitemap missing ${canonical}`);

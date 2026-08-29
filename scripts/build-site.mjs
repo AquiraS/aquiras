@@ -16,7 +16,12 @@ const absoluteUrl = (pathname) => new URL(pathname, `${content.site.origin}/`).h
 const jsonForHtml = (value) => JSON.stringify(value, null, 2).replaceAll("<", "\\u003c");
 
 function networkCards() {
-  return `<div class="network-grid">${content.network.map((item, index) => `<article class="network-card"><p class="index">0${index + 1}</p><p class="role">${escapeHtml(item.role)}</p><h3>${escapeHtml(item.label)}</h3><p>${escapeHtml(item.text)}</p><a href="${escapeHtml(item.href)}"${item.href === content.site.origin + "/" ? "" : ' rel="external noopener noreferrer"'}>${item.href === content.site.origin + "/" ? "このサイト" : "公式サイト"}を見る <span aria-hidden="true">→</span></a></article>`).join("")}</div>`;
+  return `<div class="network-grid">${content.network.map((item, index) => {
+    const isCurrentSite = item.href === content.site.origin + "/";
+    const linkText = `${isCurrentSite ? "このサイト" : "公式サイト"}を見る`;
+    const ariaLabel = `${item.label}のホームページを開く`;
+    return `<article class="network-card"><a class="network-card__link" href="${escapeHtml(item.href)}"${isCurrentSite ? "" : ' rel="external noopener noreferrer"'} aria-label="${escapeHtml(ariaLabel)}"><p class="index">0${index + 1}</p><p class="role">${escapeHtml(item.role)}</p><h3>${escapeHtml(item.label)}</h3><p>${escapeHtml(item.text)}</p><span class="network-card__cta">${escapeHtml(linkText)} <span aria-hidden="true">→</span></span></a></article>`;
+  }).join("")}</div>`;
 }
 
 function header(pathname) {
