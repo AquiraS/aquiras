@@ -45,7 +45,8 @@ function header(pathname) {
 
 function footer() {
   const galleryLink = `<li><a href="${escapeHtml(content.gallery.href)}" target="_blank" rel="external noopener noreferrer" aria-label="${escapeHtml(`${content.gallery.label}を新しいタブで開く`)}">${escapeHtml(content.gallery.label)}</a></li>`;
-  return `<footer class="site-footer"><div><p class="footer-title">${escapeHtml(content.site.name)}</p><p>対話・協働・プロジェクト</p></div><nav aria-label="Aquira公式ネットワーク"><p class="footer-label">AQUIRA OFFICIAL NETWORK</p><ul>${journeySteps.map((item) => `<li><a href="${escapeHtml(item.href)}"${item.href === content.site.origin + "/" ? "" : ' rel="external noopener noreferrer"'}>${escapeHtml(item.destination)}</a></li>`).join("")}${galleryLink}</ul></nav><p class="footer-date">最終更新 <time datetime="${content.site.lastModified}">${content.site.lastModified}</time></p></footer>`;
+  const newsLink = `<li><a href="${escapeHtml(content.news.href)}" target="_blank" rel="external noopener noreferrer" aria-label="${escapeHtml(`${content.news.label}を新しいタブで開く`)}">${escapeHtml(content.news.label)}</a></li>`;
+  return `<footer class="site-footer"><div><p class="footer-title">${escapeHtml(content.site.name)}</p><p>対話・協働・プロジェクト</p></div><nav aria-label="Aquira公式ネットワーク"><p class="footer-label">AQUIRA OFFICIAL NETWORK</p><ul>${journeySteps.map((item) => `<li><a href="${escapeHtml(item.href)}"${item.href === content.site.origin + "/" ? "" : ' rel="external noopener noreferrer"'}>${escapeHtml(item.destination)}</a></li>`).join("")}${galleryLink}${newsLink}</ul></nav><p class="footer-date">最終更新 <time datetime="${content.site.lastModified}">${content.site.lastModified}</time></p></footer>`;
 }
 
 function schemas(pathname, title, description, type = "WebPage") {
