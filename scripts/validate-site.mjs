@@ -24,4 +24,8 @@ const robots = await readFile(path.join(root, "robots.txt"), "utf8");
 const sitemap = await readFile(path.join(root, "sitemap.xml"), "utf8");
 for (const [, canonical] of pages) if (!sitemap.includes(`<loc>${canonical}</loc>`)) throw new Error(`sitemap missing ${canonical}`);
 if (!robots.includes("Sitemap: https://www.aquira.org/sitemap.xml")) throw new Error("robots sitemap missing");
+const production = JSON.parse(await readFile(path.join(root, "ops/production.json"), "utf8"));
+if (production.production_origin !== "https://www.aquira.org/") throw new Error("production.json: production origin is incorrect");
+if (production.canonical_host !== "www.aquira.org") throw new Error("production.json: canonical host is incorrect");
+if (production.deployment_mode !== "manual workflow dispatch") throw new Error("production.json: unexpected deployment mode");
 console.log(`Validation passed: ${pages.length} pages, canonical URLs, JSON-LD, network links, sitemap and robots.`);
