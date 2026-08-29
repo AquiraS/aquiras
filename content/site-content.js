@@ -8,7 +8,11 @@ const siteContent = {
     shortName: "AQUIRA.ORG",
     origin: "https://www.aquira.org",
     description: "Aquiraの対話、協働、社会と交わるプロジェクトに関する公式情報を扱うサイトです。",
-    lastModified: "2026-08-28",
+    lastModified: "2026-08-29",
+  },
+  gallery: {
+    label: "ギャラリー",
+    href: "https://www.viewbug.com/member/Aquira#/",
   },
   role: {
     eyebrow: "PROJECTS & DIALOGUE",

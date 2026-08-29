@@ -8,6 +8,8 @@ const pages = [
   ["about/index.html", "https://www.aquira.org/about/", "AboutPage"],
   ["contact/index.html", "https://www.aquira.org/contact/", "ContactPage"],
 ];
+const galleryUrl = "https://www.viewbug.com/member/Aquira#/";
+const galleryLink = `<a href="${galleryUrl}" target="_blank" rel="external noopener noreferrer" aria-label="ギャラリーを新しいタブで開く">ギャラリー</a>`;
 for (const [file, canonical, type] of pages) {
   const html = await readFile(path.join(root, file), "utf8");
   if (!html.includes('<html lang="ja">')) throw new Error(`${file}: missing Japanese language metadata`);
@@ -18,6 +20,10 @@ for (const [file, canonical, type] of pages) {
   if (!graph.some((item) => item["@type"] === type)) throw new Error(`${file}: missing ${type} schema`);
   for (const domain of ["https://www.aquira.art/", "https://www.aquira1978.com/", "https://www.aquira.org/"]) {
     if (!html.includes(domain)) throw new Error(`${file}: missing official network link ${domain}`);
+  }
+  const galleryLinkCount = html.split(galleryLink).length - 1;
+  if (galleryLinkCount !== 2) {
+    throw new Error(`${file}: expected gallery link in header and footer, found ${galleryLinkCount}`);
   }
 }
 const officialNetworkUrls = ["https://www.aquira.art/", "https://www.aquira1978.com/", "https://www.aquira.org/"];
@@ -38,4 +44,4 @@ const production = JSON.parse(await readFile(path.join(root, "ops/production.jso
 if (production.production_origin !== "https://www.aquira.org/") throw new Error("production.json: production origin is incorrect");
 if (production.canonical_host !== "www.aquira.org") throw new Error("production.json: canonical host is incorrect");
 if (production.deployment_mode !== "manual workflow dispatch") throw new Error("production.json: unexpected deployment mode");
-console.log(`Validation passed: ${pages.length} pages, canonical URLs, JSON-LD, network links, sitemap and robots.`);
+console.log(`Validation passed: ${pages.length} pages, canonical URLs, JSON-LD, network and gallery links, sitemap and robots.`);
