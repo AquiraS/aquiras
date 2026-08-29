@@ -14,6 +14,42 @@ const siteContent = {
     label: "ギャラリー",
     href: "https://www.viewbug.com/member/Aquira#/",
   },
+  journey: {
+    stage: "dialogue",
+    ariaLabel: "AQUIRAをめぐる3章",
+    eyebrow: "AQUIRA JOURNEY",
+    eyebrowSupplement: "3つの公式サイトをめぐる",
+    currentLabel: "現在地",
+    steps: [
+      {
+        number: "01",
+        chapter: "作品と出会う",
+        destination: "作品・表現",
+        role: "OFFICIAL ARTIST HOME",
+        text: "作品、作家プロフィール、協働、利用許諾に関する公式情報。",
+        href: "https://www.aquira.art/",
+        ariaLabel: "第01章 作品と出会う — 作品・表現",
+      },
+      {
+        number: "02",
+        chapter: "起点をたどる",
+        destination: "起点・記録",
+        role: "ORIGIN & ARCHIVE",
+        text: "名称の由来、来歴、アーカイブ、ブランド利用に関する記録。",
+        href: "https://www.aquira1978.com/",
+        ariaLabel: "第02章 起点をたどる — 起点・記録",
+      },
+      {
+        number: "03",
+        chapter: "対話へひらく",
+        destination: "公共的実践",
+        role: "PROJECTS & DIALOGUE",
+        text: "対話、協働、社会と交わるプロジェクトの記録と入口。",
+        href: "https://www.aquira.org/",
+        ariaLabel: "第03章 対話へひらく — 公共的実践",
+      },
+    ],
+  },
   role: {
     eyebrow: "PROJECTS & DIALOGUE",
     title: "対話から、社会と交わる実践へ。",
@@ -48,26 +84,6 @@ const siteContent = {
     lead: "プロジェクト、協働、学びの場、作品を起点とした対話について、関心のあることをお知らせください。内容や条件が未整理の段階でも構いません。",
     email: "aquirae@me.com",
   },
-  network: [
-    {
-      label: "作品・表現",
-      role: "OFFICIAL ARTIST HOME",
-      text: "作品、作家プロフィール、協働、利用許諾に関する公式情報。",
-      href: "https://www.aquira.art/",
-    },
-    {
-      label: "起点・記録",
-      role: "ORIGIN & ARCHIVE",
-      text: "名称の由来、来歴、アーカイブ、ブランド利用に関する記録。",
-      href: "https://www.aquira1978.com/",
-    },
-    {
-      label: "公共的実践",
-      role: "PROJECTS & DIALOGUE",
-      text: "対話、協働、社会と交わるプロジェクトの記録と入口。",
-      href: "https://www.aquira.org/",
-    },
-  ],
 };
 
 export default siteContent;
