@@ -1,0 +1,10 @@
+{
+  "site": "aquira.org",
+  "production_origin": "https://www.aquira.org/",
+  "canonical_host": "www.aquira.org",
+  "repository": "AquiraS/aquiras",
+  "hosting_target": "GitHub Pages",
+  "deployment_mode": "manual workflow dispatch",
+  "analytics_measurement_id": null,
+  "analytics_note": "Configure the measurement ID only after the property is created and verified; do not place secrets in this repository."
+}
