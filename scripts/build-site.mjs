@@ -26,14 +26,16 @@ function networkCards() {
 
 function header(pathname) {
   const links = [
-    ["活動の基準", "/about/"],
-    ["お問い合わせ", "/contact/"],
+    { label: content.gallery.label, href: content.gallery.href, external: true },
+    { label: "活動の基準", href: "/about/" },
+    { label: "お問い合わせ", href: "/contact/" },
   ];
-  return `<header class="site-header"><a class="wordmark" href="/" aria-label="Aquira.org ホーム">${escapeHtml(content.site.shortName)}</a><nav aria-label="主要ナビゲーション">${links.map(([label, href]) => `<a href="${href}"${pathname === href ? ' aria-current="page"' : ""}>${label}</a>`).join("")}</nav><a class="header-contact" href="mailto:${content.contact.email}">お問い合わせ</a></header>`;
+  return `<header class="site-header"><a class="wordmark" href="/" aria-label="Aquira.org ホーム">${escapeHtml(content.site.shortName)}</a><nav aria-label="主要ナビゲーション">${links.map(({ label, href, external = false }) => `<a href="${escapeHtml(href)}"${external ? ` target="_blank" rel="external noopener noreferrer" aria-label="${escapeHtml(`${label}を新しいタブで開く`)}"` : pathname === href ? ' aria-current="page"' : ""}>${escapeHtml(label)}</a>`).join("")}</nav><a class="header-contact" href="mailto:${content.contact.email}">お問い合わせ</a></header>`;
 }
 
 function footer() {
-  return `<footer class="site-footer"><div><p class="footer-title">${escapeHtml(content.site.name)}</p><p>対話・協働・プロジェクト</p></div><nav aria-label="Aquira公式ネットワーク"><p class="footer-label">AQUIRA OFFICIAL NETWORK</p><ul>${content.network.map((item) => `<li><a href="${escapeHtml(item.href)}"${item.href === content.site.origin + "/" ? "" : ' rel="external noopener noreferrer"'}>${escapeHtml(item.label)}</a></li>`).join("")}</ul></nav><p class="footer-date">最終更新 <time datetime="${content.site.lastModified}">${content.site.lastModified}</time></p></footer>`;
+  const galleryLink = `<li><a href="${escapeHtml(content.gallery.href)}" target="_blank" rel="external noopener noreferrer" aria-label="${escapeHtml(`${content.gallery.label}を新しいタブで開く`)}">${escapeHtml(content.gallery.label)}</a></li>`;
+  return `<footer class="site-footer"><div><p class="footer-title">${escapeHtml(content.site.name)}</p><p>対話・協働・プロジェクト</p></div><nav aria-label="Aquira公式ネットワーク"><p class="footer-label">AQUIRA OFFICIAL NETWORK</p><ul>${content.network.map((item) => `<li><a href="${escapeHtml(item.href)}"${item.href === content.site.origin + "/" ? "" : ' rel="external noopener noreferrer"'}>${escapeHtml(item.label)}</a></li>`).join("")}${galleryLink}</ul></nav><p class="footer-date">最終更新 <time datetime="${content.site.lastModified}">${content.site.lastModified}</time></p></footer>`;
 }
 
 function schemas(pathname, title, description, type = "WebPage") {
