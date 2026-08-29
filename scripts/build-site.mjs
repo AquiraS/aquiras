@@ -14,13 +14,23 @@ const escapeHtml = (value) => String(value)
   .replaceAll("'", "&#039;");
 const absoluteUrl = (pathname) => new URL(pathname, `${content.site.origin}/`).href;
 const jsonForHtml = (value) => JSON.stringify(value, null, 2).replaceAll("<", "\\u003c");
+const journeySteps = content.journey.steps;
 
-function networkCards() {
-  return `<div class="network-grid">${content.network.map((item, index) => {
+function journeyRail() {
+  return `<nav class="journey-rail" aria-label="${escapeHtml(content.journey.ariaLabel)}"><div class="journey-rail__inner"><p class="journey-rail__eyebrow">${escapeHtml(content.journey.eyebrow)} <span>${escapeHtml(content.journey.eyebrowSupplement)}</span></p><ol class="journey-rail__list">${journeySteps.map((step) => {
+    const isCurrent = step.number === "03";
+    return `<li class="journey-rail__item${isCurrent ? " is-current" : ""}"><a href="${escapeHtml(step.href)}" aria-label="${escapeHtml(step.ariaLabel)}"${isCurrent ? ' aria-current="step"' : ""}><span class="journey-rail__number" aria-hidden="true">${escapeHtml(step.number)}</span><span class="journey-rail__chapter">${escapeHtml(step.chapter)}</span><span class="journey-rail__destination">${escapeHtml(step.destination)}</span>${isCurrent ? `<span class="journey-rail__current">${escapeHtml(content.journey.currentLabel)}</span>` : ""}</a></li>`;
+  }).join("")}</ol></div></nav>`;
+}
+
+function networkCards({ chapterCards = false } = {}) {
+  return `<div class="network-grid">${journeySteps.map((item) => {
     const isCurrentSite = item.href === content.site.origin + "/";
     const linkText = `${isCurrentSite ? "このサイト" : "公式サイト"}を見る`;
-    const ariaLabel = `${item.label}のホームページを開く`;
-    return `<article class="network-card"><a class="network-card__link" href="${escapeHtml(item.href)}"${isCurrentSite ? "" : ' rel="external noopener noreferrer"'} aria-label="${escapeHtml(ariaLabel)}"><p class="index">0${index + 1}</p><p class="role">${escapeHtml(item.role)}</p><h3>${escapeHtml(item.label)}</h3><p>${escapeHtml(item.text)}</p><span class="network-card__cta">${escapeHtml(linkText)} <span aria-hidden="true">→</span></span></a></article>`;
+    const ariaLabel = `${item.destination}のホームページを開く`;
+    const articleAttributes = chapterCards ? ` data-chapter-card data-journey-step="${escapeHtml(item.number)}"${isCurrentSite ? ' data-journey-current="true"' : ""}` : "";
+    const chapterLine = chapterCards ? `<p class="network-card__chapter">CHAPTER ${escapeHtml(item.number)} · ${escapeHtml(item.chapter)}${isCurrentSite ? ` <span class="network-card__current">${escapeHtml(content.journey.currentLabel)}</span>` : ""}</p>` : "";
+    return `<article class="network-card${isCurrentSite && chapterCards ? " network-card--current" : ""}"${articleAttributes}><a class="network-card__link" href="${escapeHtml(item.href)}"${isCurrentSite ? "" : ' rel="external noopener noreferrer"'} aria-label="${escapeHtml(ariaLabel)}"><p class="index">${escapeHtml(item.number)}</p>${chapterLine}<p class="role">${escapeHtml(item.role)}</p><h3>${escapeHtml(item.destination)}</h3><p>${escapeHtml(item.text)}</p><span class="network-card__cta">${escapeHtml(linkText)} <span aria-hidden="true">→</span></span></a></article>`;
   }).join("")}</div>`;
 }
 
@@ -35,7 +45,7 @@ function header(pathname) {
 
 function footer() {
   const galleryLink = `<li><a href="${escapeHtml(content.gallery.href)}" target="_blank" rel="external noopener noreferrer" aria-label="${escapeHtml(`${content.gallery.label}を新しいタブで開く`)}">${escapeHtml(content.gallery.label)}</a></li>`;
-  return `<footer class="site-footer"><div><p class="footer-title">${escapeHtml(content.site.name)}</p><p>対話・協働・プロジェクト</p></div><nav aria-label="Aquira公式ネットワーク"><p class="footer-label">AQUIRA OFFICIAL NETWORK</p><ul>${content.network.map((item) => `<li><a href="${escapeHtml(item.href)}"${item.href === content.site.origin + "/" ? "" : ' rel="external noopener noreferrer"'}>${escapeHtml(item.label)}</a></li>`).join("")}${galleryLink}</ul></nav><p class="footer-date">最終更新 <time datetime="${content.site.lastModified}">${content.site.lastModified}</time></p></footer>`;
+  return `<footer class="site-footer"><div><p class="footer-title">${escapeHtml(content.site.name)}</p><p>対話・協働・プロジェクト</p></div><nav aria-label="Aquira公式ネットワーク"><p class="footer-label">AQUIRA OFFICIAL NETWORK</p><ul>${journeySteps.map((item) => `<li><a href="${escapeHtml(item.href)}"${item.href === content.site.origin + "/" ? "" : ' rel="external noopener noreferrer"'}>${escapeHtml(item.destination)}</a></li>`).join("")}${galleryLink}</ul></nav><p class="footer-date">最終更新 <time datetime="${content.site.lastModified}">${content.site.lastModified}</time></p></footer>`;
 }
 
 function schemas(pathname, title, description, type = "WebPage") {
@@ -59,7 +69,8 @@ function layout({ pathname, title, description, main, type }) {
   <link rel="canonical" href="${absoluteUrl(pathname)}" />
   <link rel="alternate" href="${absoluteUrl(pathname)}" hreflang="ja" />
   <link rel="alternate" href="${absoluteUrl(pathname)}" hreflang="x-default" />
-  <link rel="stylesheet" href="/styles.css?v=20260828" />
+  <link rel="stylesheet" href="/styles.css?v=20260829" />
+  <script src="/journey.js" defer></script>
   <meta property="og:locale" content="ja_JP" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Aquira.org" />
@@ -69,9 +80,10 @@ function layout({ pathname, title, description, main, type }) {
   <meta name="twitter:card" content="summary" />
   <script type="application/ld+json">${jsonForHtml({ "@context": "https://schema.org", "@graph": schemas(pathname, title, description, type) })}</script>
 </head>
-<body>
+<body data-journey-stage="${escapeHtml(content.journey.stage)}">
   <a class="skip-link" href="#main-content">本文へ移動</a>
   ${header(pathname)}
+  ${journeyRail()}
   <main id="main-content">${main}</main>
   ${footer()}
 </body>
@@ -80,7 +92,7 @@ function layout({ pathname, title, description, main, type }) {
 
 const homeTitle = "Aquira.org｜プロジェクトと対話";
 const homeDescription = content.site.description;
-const homeMain = `<section class="hero"><p class="eyebrow">${content.role.eyebrow}</p><h1>${content.role.title}</h1><p class="lead">${content.role.lead}</p><a class="button" href="/about/">活動の基準を知る</a></section><section class="section" aria-labelledby="purpose-title"><div class="section-heading"><p class="eyebrow">PURPOSE</p><h2 id="purpose-title">対話に、文脈を添える。</h2></div><div class="card-grid">${content.purpose.map((item) => `<article class="content-card"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`).join("")}</div></section><section class="section section-muted" aria-labelledby="network-title"><div class="section-heading"><p class="eyebrow">OFFICIAL NETWORK</p><h2 id="network-title">3つの入口、ひとつの文脈。</h2></div><p class="statement">Aquiraの公式サイトは、情報の種類ごとに役割を分けています。探している内容に合うサイトへ、明確にご案内します。</p>${networkCards()}</section><section class="section contact-section" aria-labelledby="home-contact-title"><div class="section-heading"><p class="eyebrow">CONTACT</p><h2 id="home-contact-title">対話の始まりを、静かに。</h2></div><p class="statement">プロジェクト、協働、学びの場、作品を起点とした対話について、ご相談を受け付けています。</p><a class="button" href="/contact/">お問い合わせへ</a></section>`;
+const homeMain = `<section class="hero"><p class="eyebrow">${content.role.eyebrow}</p><h1>${content.role.title}</h1><p class="lead">${content.role.lead}</p><a class="button" href="/about/">活動の基準を知る</a></section><section class="section" aria-labelledby="purpose-title"><div class="section-heading"><p class="eyebrow">PURPOSE</p><h2 id="purpose-title">対話に、文脈を添える。</h2></div><div class="card-grid">${content.purpose.map((item) => `<article class="content-card"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`).join("")}</div></section><section class="section section-muted" aria-labelledby="network-title"><div class="section-heading"><p class="eyebrow">OFFICIAL NETWORK</p><h2 id="network-title">3つの入口、ひとつの文脈。</h2></div><p class="statement">Aquiraの公式サイトは、情報の種類ごとに役割を分けています。探している内容に合うサイトへ、明確にご案内します。</p>${networkCards({ chapterCards: true })}</section><section class="section contact-section" aria-labelledby="home-contact-title"><div class="section-heading"><p class="eyebrow">CONTACT</p><h2 id="home-contact-title">対話の始まりを、静かに。</h2></div><p class="statement">プロジェクト、協働、学びの場、作品を起点とした対話について、ご相談を受け付けています。</p><a class="button" href="/contact/">お問い合わせへ</a></section>`;
 
 const aboutTitle = "活動の基準｜Aquira.org";
 const aboutDescription = "aquira.orgにおける活動の掲載基準、相談の進め方、公式ネットワークの役割を案内します。";
