@@ -39,7 +39,6 @@ function header(pathname) {
   const links = [
     { label: content.gallery.label, href: content.gallery.href, external: true },
     { label: "活動の基準", href: "/about/" },
-    { label: "お問い合わせ", href: "/contact/" },
   ];
   return `<header class="site-header"><a class="wordmark" href="/" aria-label="Aquira.org ホーム">${escapeHtml(content.site.shortName)}</a><nav aria-label="主要ナビゲーション">${links.map(({ label, href, external = false }) => `<a href="${escapeHtml(href)}"${external ? ` target="_blank" rel="external noopener noreferrer" aria-label="${escapeHtml(`${label}を新しいタブで開く`)}"` : pathname === href ? ' aria-current="page"' : ""}>${escapeHtml(label)}</a>`).join("")}</nav><a class="header-contact" href="mailto:${content.contact.email}">お問い合わせ</a></header>`;
 }
@@ -72,8 +71,7 @@ function layout({ pathname, title, description, main, type }) {
 ${pathname === "/" ? `  <link rel="preload" as="image" href="${absoluteUrl("/media/aquira-archive-interior.webp")}" type="image/webp" fetchpriority="high" />` : ""}
   <link rel="alternate" href="${absoluteUrl(pathname)}" hreflang="ja" />
   <link rel="alternate" href="${absoluteUrl(pathname)}" hreflang="x-default" />
-  <link rel="stylesheet" href="/styles.css?v=20260831" />
-  <script src="/journey.js" defer></script>
+  <link rel="stylesheet" href="/styles.css?v=20260831a" />
   <meta property="og:locale" content="ja_JP" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Aquira.org" />
@@ -92,7 +90,6 @@ ${pathname === "/" ? `  <link rel="preload" as="image" href="${absoluteUrl("/med
 <body data-journey-stage="${escapeHtml(content.journey.stage)}">
   <a class="skip-link" href="#main-content">本文へ移動</a>
   ${header(pathname)}
-  ${journeyRail()}
   <main id="main-content">${main}</main>
   ${footer()}
 </body>
@@ -101,7 +98,7 @@ ${pathname === "/" ? `  <link rel="preload" as="image" href="${absoluteUrl("/med
 
 const homeTitle = "Aquira.org｜プロジェクトと対話";
 const homeDescription = content.site.description;
-const homeMain = `<section class="hero hero-visual" aria-labelledby="hero-title">${heroMedia}<div class="hero__content"><p class="eyebrow">${content.role.eyebrow}</p><h1 id="hero-title">${content.role.title}</h1><p class="lead">${content.role.lead}</p><a class="button" href="/about/">活動の基準を知る</a></div></section><section class="section" aria-labelledby="purpose-title"><div class="section-heading"><p class="eyebrow">PURPOSE</p><h2 id="purpose-title">対話に、文脈を添える。</h2></div><div class="card-grid">${content.purpose.map((item) => `<article class="content-card"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`).join("")}</div></section><section class="section section-muted" aria-labelledby="network-title"><div class="section-heading"><p class="eyebrow">OFFICIAL NETWORK</p><h2 id="network-title">3つの入口、ひとつの文脈。</h2></div><p class="statement">Aquiraの公式サイトは、情報の種類ごとに役割を分けています。探している内容に合うサイトへ、明確にご案内します。</p>${networkCards({ chapterCards: true })}</section><section class="section contact-section" aria-labelledby="home-contact-title"><div class="section-heading"><p class="eyebrow">CONTACT</p><h2 id="home-contact-title">対話の始まりを、静かに。</h2></div><p class="statement">プロジェクト、協働、学びの場、作品を起点とした対話について、ご相談を受け付けています。</p><a class="button" href="/contact/">お問い合わせへ</a></section>`;
+const homeMain = `<section class="hero hero-visual" aria-labelledby="hero-title">${heroMedia}<div class="hero__content"><p class="eyebrow">${content.role.eyebrow}</p><h1 id="hero-title">${content.role.title}</h1><p class="lead">${content.role.lead}</p><a class="button" href="/about/">活動の基準を知る</a></div></section><section class="section" aria-labelledby="purpose-title"><div class="section-heading"><p class="eyebrow">PURPOSE</p><h2 id="purpose-title">対話に、文脈を添える。</h2></div><div class="card-grid">${content.purpose.map((item) => `<article class="content-card"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`).join("")}</div></section><section class="section contact-section" aria-labelledby="home-contact-title"><div class="section-heading"><p class="eyebrow">CONTACT</p><h2 id="home-contact-title">対話の始まりを、静かに。</h2></div><p class="statement">プロジェクト、協働、学びの場、作品を起点とした対話について、ご相談を受け付けています。</p><a class="button" href="/contact/">お問い合わせへ</a></section>`;
 
 const aboutTitle = "活動の基準｜Aquira.org";
 const aboutDescription = "aquira.orgにおける活動の掲載基準、相談の進め方、公式ネットワークの役割を案内します。";
