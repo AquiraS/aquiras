@@ -15,6 +15,7 @@ const escapeHtml = (value) => String(value)
 const absoluteUrl = (pathname) => new URL(pathname, `${content.site.origin}/`).href;
 const jsonForHtml = (value) => JSON.stringify(value, null, 2).replaceAll("<", "\\u003c");
 const journeySteps = content.journey.steps;
+const heroMedia = `<picture class="hero__media"><source media="(max-width: 700px)" srcset="/media/aquira-archive-interior-mobile.webp" type="image/webp" /><img class="hero__image" src="/media/aquira-archive-interior.webp" width="2048" height="1392" alt="梁のある室内、カウンター、花、吊り下げ照明、右側に立つ人物を写したモノクロ写真" fetchpriority="high" decoding="async" /></picture>`;
 
 function journeyRail() {
   return `<nav class="journey-rail" aria-label="${escapeHtml(content.journey.ariaLabel)}"><div class="journey-rail__inner"><p class="journey-rail__eyebrow">${escapeHtml(content.journey.eyebrow)} <span>${escapeHtml(content.journey.eyebrowSupplement)}</span></p><ol class="journey-rail__list">${journeySteps.map((step) => {
@@ -68,9 +69,10 @@ function layout({ pathname, title, description, main, type }) {
   <meta name="theme-color" content="#121311" />
   <title>${escapeHtml(title)}</title>
   <link rel="canonical" href="${absoluteUrl(pathname)}" />
+${pathname === "/" ? `  <link rel="preload" as="image" href="${absoluteUrl("/media/aquira-archive-interior.webp")}" type="image/webp" fetchpriority="high" />` : ""}
   <link rel="alternate" href="${absoluteUrl(pathname)}" hreflang="ja" />
   <link rel="alternate" href="${absoluteUrl(pathname)}" hreflang="x-default" />
-  <link rel="stylesheet" href="/styles.css?v=20260829" />
+  <link rel="stylesheet" href="/styles.css?v=20260831" />
   <script src="/journey.js" defer></script>
   <meta property="og:locale" content="ja_JP" />
   <meta property="og:type" content="website" />
@@ -78,7 +80,13 @@ function layout({ pathname, title, description, main, type }) {
   <meta property="og:title" content="${escapeHtml(title)}" />
   <meta property="og:description" content="${escapeHtml(description)}" />
   <meta property="og:url" content="${absoluteUrl(pathname)}" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="${absoluteUrl("/media/aquira-archive-interior.webp")}" />
+  <meta property="og:image:width" content="2048" />
+  <meta property="og:image:height" content="1392" />
+  <meta property="og:image:alt" content="梁のある室内、カウンター、花、吊り下げ照明、右側に立つ人物を写したモノクロ写真" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="${absoluteUrl("/media/aquira-archive-interior.webp")}" />
+  <meta name="twitter:image:alt" content="梁のある室内、カウンター、花、吊り下げ照明、右側に立つ人物を写したモノクロ写真" />
   <script type="application/ld+json">${jsonForHtml({ "@context": "https://schema.org", "@graph": schemas(pathname, title, description, type) })}</script>
 </head>
 <body data-journey-stage="${escapeHtml(content.journey.stage)}">
@@ -93,7 +101,7 @@ function layout({ pathname, title, description, main, type }) {
 
 const homeTitle = "Aquira.org｜プロジェクトと対話";
 const homeDescription = content.site.description;
-const homeMain = `<section class="hero"><p class="eyebrow">${content.role.eyebrow}</p><h1>${content.role.title}</h1><p class="lead">${content.role.lead}</p><a class="button" href="/about/">活動の基準を知る</a></section><section class="section" aria-labelledby="purpose-title"><div class="section-heading"><p class="eyebrow">PURPOSE</p><h2 id="purpose-title">対話に、文脈を添える。</h2></div><div class="card-grid">${content.purpose.map((item) => `<article class="content-card"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`).join("")}</div></section><section class="section section-muted" aria-labelledby="network-title"><div class="section-heading"><p class="eyebrow">OFFICIAL NETWORK</p><h2 id="network-title">3つの入口、ひとつの文脈。</h2></div><p class="statement">Aquiraの公式サイトは、情報の種類ごとに役割を分けています。探している内容に合うサイトへ、明確にご案内します。</p>${networkCards({ chapterCards: true })}</section><section class="section contact-section" aria-labelledby="home-contact-title"><div class="section-heading"><p class="eyebrow">CONTACT</p><h2 id="home-contact-title">対話の始まりを、静かに。</h2></div><p class="statement">プロジェクト、協働、学びの場、作品を起点とした対話について、ご相談を受け付けています。</p><a class="button" href="/contact/">お問い合わせへ</a></section>`;
+const homeMain = `<section class="hero hero-visual" aria-labelledby="hero-title">${heroMedia}<div class="hero__content"><p class="eyebrow">${content.role.eyebrow}</p><h1 id="hero-title">${content.role.title}</h1><p class="lead">${content.role.lead}</p><a class="button" href="/about/">活動の基準を知る</a></div></section><section class="section" aria-labelledby="purpose-title"><div class="section-heading"><p class="eyebrow">PURPOSE</p><h2 id="purpose-title">対話に、文脈を添える。</h2></div><div class="card-grid">${content.purpose.map((item) => `<article class="content-card"><h3>${escapeHtml(item.title)}</h3><p>${escapeHtml(item.text)}</p></article>`).join("")}</div></section><section class="section section-muted" aria-labelledby="network-title"><div class="section-heading"><p class="eyebrow">OFFICIAL NETWORK</p><h2 id="network-title">3つの入口、ひとつの文脈。</h2></div><p class="statement">Aquiraの公式サイトは、情報の種類ごとに役割を分けています。探している内容に合うサイトへ、明確にご案内します。</p>${networkCards({ chapterCards: true })}</section><section class="section contact-section" aria-labelledby="home-contact-title"><div class="section-heading"><p class="eyebrow">CONTACT</p><h2 id="home-contact-title">対話の始まりを、静かに。</h2></div><p class="statement">プロジェクト、協働、学びの場、作品を起点とした対話について、ご相談を受け付けています。</p><a class="button" href="/contact/">お問い合わせへ</a></section>`;
 
 const aboutTitle = "活動の基準｜Aquira.org";
 const aboutDescription = "aquira.orgにおける活動の掲載基準、相談の進め方、公式ネットワークの役割を案内します。";

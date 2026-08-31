@@ -16,6 +16,9 @@ const officialNetworkLinks = [
 const galleryUrl = "https://www.viewbug.com/member/Aquira#/";
 const galleryLink = `<a href="${galleryUrl}" target="_blank" rel="external noopener noreferrer" aria-label="ギャラリーを新しいタブで開く">ギャラリー</a>`;
 const newsLink = '<a href="https://note.com/aquira" target="_blank" rel="external noopener noreferrer" aria-label="Newsを新しいタブで開く">News</a>';
+const heroImage = "/media/aquira-archive-interior.webp";
+const mobileHeroImage = "/media/aquira-archive-interior-mobile.webp";
+const heroAlt = "梁のある室内、カウンター、花、吊り下げ照明、右側に立つ人物を写したモノクロ写真";
 const journeyScript = '<script src="/journey.js" defer></script>';
 
 function requiredMatch(value, expression, message) {
@@ -101,6 +104,14 @@ for (const file of ["index.html", "about/index.html"]) {
 }
 
 const homepage = await readFile(path.join(root, "index.html"), "utf8");
+if (!homepage.includes('class="hero hero-visual"') || !homepage.includes(`src="${heroImage}"`) || !homepage.includes(`srcset="${mobileHeroImage}"`) || !homepage.includes(`alt="${heroAlt}"`)) {
+  throw new Error("index.html: main visual picture, responsive source, or accessible alternative text is missing");
+}
+if (!homepage.includes('<link rel="preload" as="image"') || !homepage.includes('fetchpriority="high"')) {
+  throw new Error("index.html: main visual preload is missing");
+}
+await access(path.join(root, heroImage));
+await access(path.join(root, mobileHeroImage));
 const homeChapterCards = [...homepage.matchAll(/<article class="network-card(?: network-card--current)?" data-chapter-card data-journey-step="(0[1-3])"(?: data-journey-current="true")?>/g)];
 if (homeChapterCards.length !== 3) throw new Error(`index.html: expected exactly three chapter cards, found ${homeChapterCards.length}`);
 for (const [index, expected] of officialNetworkLinks.entries()) {
