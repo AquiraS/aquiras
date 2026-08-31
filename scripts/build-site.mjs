@@ -71,7 +71,7 @@ function layout({ pathname, title, description, main, type }) {
 ${pathname === "/" ? `  <link rel="preload" as="image" href="${absoluteUrl("/media/aquira-archive-interior.webp")}" type="image/webp" fetchpriority="high" />` : ""}
   <link rel="alternate" href="${absoluteUrl(pathname)}" hreflang="ja" />
   <link rel="alternate" href="${absoluteUrl(pathname)}" hreflang="x-default" />
-  <link rel="stylesheet" href="/styles.css?v=20260831a" />
+  <link rel="stylesheet" href="/styles.css?v=20260831b" />
   <meta property="og:locale" content="ja_JP" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Aquira.org" />
